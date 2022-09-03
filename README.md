@@ -1,0 +1,1 @@
+kubernetes常用资源。

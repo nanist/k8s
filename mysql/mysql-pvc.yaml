@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mypvclocal
+  namespace: dev-mysql
+spec:
+  accessModes: #访问模式 申领在请求具有特定访问模式的存储时，使用与卷相同的访问模式约定。
+    - ReadWriteMany
+  volumeMode: Filesystem #卷模式
+  resources:
+    requests:
+      storage: 4Gi
+  storageClassName: local-storage # 此处须显式设置空字符串或指定值，否则会被设置为默认的 StorageClass

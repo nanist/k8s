@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mypv1
+  namespace: dev-mysql
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain   # 手动删除 
+  storageClassName: local-storage #表明这个pv所属的storageClass
+  local:
+    path: /k8sVolume/mysqlVolume/mypv1 #节点上卷的完整路径。（必须是存在的路径，不然容器无法创建，deployment会报错）可以是目录或块设备(磁盘、分区…)。
+  nodeAffinity: #节点亲和性配置，限制从哪些节点上可以访问此卷
+    required:  
+      nodeSelectorTerms: #数组类型
+      - matchExpressions: #数组类型
+        - key: kubernetes.io/hostname   #字符串类型。被标签选择器应用的label key
+          operator: In   #字符串类型。表示键与一组值的关系。有效的操作符有In, NotIn, Exists, DoesNotExist。Gt, Lt。
+          values: #一个字符串数组，如果操作符为In或NotIn，则values数组必须非空。如果操作符是Exists或DoesNotExist, values数组必须为空。如果操作符为Gt或Lt，则values数组必须只有一个元素，该元素将被解释为整数。
+          - roy-ubuntu #所在节点的主机名
